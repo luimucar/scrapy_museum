@@ -1,13 +1,13 @@
-# -*- coding: utf-8 -*-
 import scrapy
-# Any additional imports (items, libraries,..)
+
 
 
 class TrialSpider(scrapy.Spider):
     name = 'trial'
     start_urls = [
         "http://pstrial-a-2018-10-19.toscrape.com/browse/insunsh",
-        "http://pstrial-a-2018-10-19.toscrape.com/browse/summertime"]  # put your start urls here
+        "http://pstrial-a-2018-10-19.toscrape.com/browse/summertime"
+    ]
     site_url = "http://pstrial-a-2018-10-19.toscrape.com"
 
 
@@ -89,7 +89,7 @@ class TrialSpider(scrapy.Spider):
         urls = [i for i in all_a if subs in i]
         for url in urls:   
             url = response.urljoin(url)
-            yield scrapy.Request(url=url, callback=self.parse_details, meta={'category': category,'type':'D'})
+            yield scrapy.Request(url = url, callback = self.parse_details, meta = {'category': category,'type':'D'})
         
 
         # Which next page will be selected?
@@ -103,7 +103,7 @@ class TrialSpider(scrapy.Spider):
         if next_page_url:
             next_page_url = response.urljoin(next_page_url)
             #if nextpage < 2:
-            yield scrapy.Request(url=next_page_url, callback=self.parse, meta={'structure': structure,'parent':parent,'type':'P','category': category})
+            yield scrapy.Request(url = next_page_url, callback = self.parse, meta = {'structure': structure,'parent': parent,'type': 'P','category': category})
         
       
         # Get the browsing structure pages (type = M)       
@@ -122,7 +122,7 @@ class TrialSpider(scrapy.Spider):
             
             for url in browse_url:   
                 url = response.urljoin(url)
-                yield scrapy.Request(url=url, callback=self.parse, meta={'structure': structure,'parent':parent,'type':'M'})
+                yield scrapy.Request(url = url, callback = self.parse, meta = {'structure': structure, 'parent': parent,'type': 'M'})
         
         
         
@@ -135,8 +135,8 @@ class TrialSpider(scrapy.Spider):
         category = response.meta["category"]
         dimen = response.css('dl > dd::text').extract()
         if len(dimen) >= 2:
-            index_b=dimen[2].find("(")
-            index_e=dimen[2].find(")")
+            index_b = dimen[2].find("(")
+            index_e = dimen[2].find(")")
             
             if(index_b > 0 and index_e > 0):
                 dimcm = dimen[2][index_b+1:index_e]
